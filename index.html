@@ -21,10 +21,10 @@
         .hero-bg {
             background: linear-gradient(135deg, var(--color-dark-purple) 0%, var(--color-desaturated-blue) 100%);
         }
-        .cta-button, .lang-button {
+        .cta-button, .lang-button, .quiz-button, .syllabus-item { /* Added .syllabus-item */
             transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-        .cta-button:hover {
+        .cta-button:hover, .quiz-button:hover {
             transform: translateY(-2px);
         }
         .lang-button.active {
@@ -34,10 +34,10 @@
         .lang-button:not(.active):hover {
             color: var(--color-dark-purple);
         }
-        .feature-card, .instructor-card, .application-card {
+        .feature-card, .instructor-card, .application-card, .quiz-question-card, .syllabus-item { /* Added .syllabus-item */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .feature-card:hover, .instructor-card:hover, .application-card:hover {
+        .feature-card:hover, .instructor-card:hover, .application-card:hover, .quiz-question-card:hover, .syllabus-item:hover { /* Added .syllabus-item */
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
@@ -69,6 +69,68 @@
             max-height: 500px; /* Adjust as needed */
             transition: max-height 0.5s ease-in;
         }
+
+        /* Quiz styles */
+        .quiz-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .quiz-option.selected {
+            border-color: var(--color-teal);
+            background-color: #f0fdfa; /* Light teal for selected */
+        }
+        .quiz-option:hover {
+            background-color: #f8fafc; /* Light gray on hover */
+        }
+        .quiz-feedback {
+            min-height: 24px; /* To prevent layout shift */
+            font-weight: 500;
+        }
+        .quiz-feedback.correct {
+            color: #10B981; /* Green-600 */
+        }
+        .quiz-feedback.incorrect {
+            color: #EF4444; /* Red-500 */
+        }
+        .code-snippet {
+            background-color: #f3f4f6; /* gray-100 */
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-family: monospace;
+            color: var(--color-dark-purple);
+            margin-bottom: 0.75rem;
+            white-space: pre-wrap; /* Ensures code wraps */
+        }
+        /* Quiz collapse/expand styles */
+        #quizToggleBtn {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+        }
+        #quizToggleBtn svg {
+            transition: transform 0.3s ease;
+        }
+        #quizToggleBtn.expanded svg {
+            transform: rotate(180deg);
+        }
+        #quizContent {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        #quizContent.expanded {
+            max-height: 2000px; /* Adjust as needed for content height */
+            transition: max-height 0.7s ease-in;
+        }
+        /* Syllabus styles */
+        .syllabus-item {
+            border-left: 4px solid var(--color-teal);
+        }
+
     </style>
 </head>
 <body class="bg-gray-100">
@@ -87,8 +149,10 @@
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="#features" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_features">Features</a>
                     <a href="#python-applications" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_applications">Applications</a>
-                    <a href="#about" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_about">About</a>
+                    <a href="#quiz" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_quiz">Quiz</a>
                     <a href="#instructor" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_instructor">Instructor</a>
+                    <a href="#syllabus" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_syllabus">Syllabus</a>
+                    <a href="#about" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_about">About</a>
                     <button id="navEnrollBtn" class="bg-[#71C0BB] hover:bg-[#5aa8a2] text-white px-4 py-2 rounded-md text-sm font-medium ml-2 cta-button" data-translate-key="nav_enroll">Enroll Now</button>
                     <div class="ml-2 pl-2 border-l border-gray-300">
                         <button id="langEnBtnDesktop" class="lang-button px-1 py-1 text-sm active" data-lang="en">EN</button>
@@ -100,8 +164,10 @@
             <div id="mobileMenu" class="hidden md:hidden mt-2 pb-2">
                 <a href="#features" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_features">Features</a>
                 <a href="#python-applications" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_applications">Applications</a>
-                <a href="#about" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_about">About</a>
+                <a href="#quiz" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_quiz">Quiz</a>
                 <a href="#instructor" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_instructor">Instructor</a>
+                <a href="#syllabus" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_syllabus">Syllabus</a>
+                <a href="#about" class="block text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-base font-medium" data-translate-key="nav_about">About</a>
                 <button id="navEnrollBtnMobile" class="w-full mt-2 bg-[#71C0BB] hover:bg-[#5aa8a2] text-white px-4 py-2 rounded-md text-base font-medium cta-button" data-translate-key="nav_enroll">Enroll Now</button>
                 <div class="mt-3 pt-3 border-t border-gray-200 flex justify-center">
                     <button id="langEnBtnMobile" class="lang-button px-2 py-1 text-sm active" data-lang="en">EN</button>
@@ -269,7 +335,27 @@
         </div>
     </section>
 
-    <section id="instructor" class="py-16 md:py-20 bg-gray-100">
+    <section id="quiz" class="py-16 md:py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-8"> 
+                <button id="quizToggleBtn" class="w-full">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-800" data-translate-key="quiz_title">Test Your Python Knowledge!</h2>
+                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <p class="text-gray-600 text-lg max-w-xl mx-auto mt-2 text-left md:text-center" data-translate-key="quiz_subtitle">
+                        A couple of quick questions to check your understanding. (Click to expand)
+                    </p>
+                </button>
+            </div>
+            <div id="quizContent" class="max-w-2xl mx-auto space-y-8"> 
+                <div id="quizContainer" class="space-y-8">
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="instructor" class="py-16 md:py-20 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12 md:mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-translate-key="instructor_title">Meet Your Instructor</h2>
@@ -277,7 +363,7 @@
                     Learn from an experienced professional dedicated to your success.
                 </p>
             </div>
-            <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-xl instructor-card flex flex-col md:flex-row items-center">
+            <div class="max-w-4xl mx-auto bg-gray-50 p-8 md:p-12 rounded-xl shadow-xl instructor-card flex flex-col md:flex-row items-center">
                 <img src="https://res.cloudinary.com/ddjivdpzj/image/upload/v1747474964/my_profile_gg96dp.jpg" alt="Course Instructor" class="w-32 h-32 md:w-40 md:h-40 rounded-full mb-6 md:mb-0 md:mr-8 shadow-md object-cover">
                 <div>
                     <h3 class="text-2xl font-semibold text-[#332D56] mb-2" data-translate-key="instructor_name_title">Nathakrit C. (Ford)</h3>
@@ -285,6 +371,43 @@
                         "Hi, I'm Nathakrit! With years of experience in Python development and some passion for teaching, I'm excited to guide you through the fascinating world of Python. I'll make learning fun and practical, equipping you with skills for real-world challenges. Let's code together!"
                     </p>
                     <p class="text-sm text-[#4E6688] font-medium" data-translate-key="instructor_expertise">Expertise: Python, Web Development, Data Analysis, AI Fundamentals</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="syllabus" class="py-16 md:py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-translate-key="syllabus_title">Course Roadmap: Your Journey with Python</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto" data-translate-key="syllabus_subtitle">
+                    A week-by-week guide to what you'll learn and achieve.
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg syllabus-item">
+                    <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="syllabus_week1_title">Week 1: Getting Started</h3>
+                    <p class="text-gray-600 text-sm" data-translate-key="syllabus_week1_desc">What is Python? Setting up your environment, your first "Hello, World!" program, understanding variables, and basic data types.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg syllabus-item">
+                    <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="syllabus_week2_title">Week 2: Control Flow & Basic Structures</h3>
+                    <p class="text-gray-600 text-sm" data-translate-key="syllabus_week2_desc">Making decisions with if/else statements, repeating tasks with loops (for, while), and an introduction to lists and tuples.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg syllabus-item">
+                    <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="syllabus_week3_title">Week 3: Functions & More Data Structures</h3>
+                    <p class="text-gray-600 text-sm" data-translate-key="syllabus_week3_desc">Creating reusable code with functions, understanding variable scope, and diving into dictionaries and sets.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg syllabus-item">
+                    <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="syllabus_week4_title">Week 4: Object-Oriented Programming (OOP) Intro</h3>
+                    <p class="text-gray-600 text-sm" data-translate-key="syllabus_week4_desc">Understanding the basics of classes and objects, simple inheritance, and the principles of OOP.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg syllabus-item">
+                    <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="syllabus_week5_title">Week 5: Files, Modules & Libraries</h3>
+                    <p class="text-gray-600 text-sm" data-translate-key="syllabus_week5_desc">Reading from and writing to files, using Python's built-in modules, and an introduction to useful external libraries.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg syllabus-item">
+                    <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="syllabus_week6_title">Week 6: Mini-Project & Future Paths</h3>
+                    <p class="text-gray-600 text-sm" data-translate-key="syllabus_week6_desc">Applying your knowledge to build a small, practical application. Discussing further learning paths in web development, data science, AI, and more.</p>
                 </div>
             </div>
         </div>
@@ -324,8 +447,10 @@
                 nav_brand: "PyNail",
                 nav_features: "Features",
                 nav_applications: "Applications",
-                nav_about: "About",
+                nav_quiz: "Quiz", 
                 nav_instructor: "Instructor",
+                nav_syllabus: "Syllabus", // New Nav Link
+                nav_about: "About",
                 nav_enroll: "Enroll Now",
                 hero_title: "Start to code Python",
                 hero_subtitle: "Dive into the world of coding with my immersive Python course, designed for absolute beginners. I'll help you transform your curiosity into capability!",
@@ -364,11 +489,58 @@
                 app_ai_desc: "Dive into data analysis, machine learning, and AI with Python's rich ecosystem of tools like TensorFlow and scikit-learn.",
                 app_iot_title: "Internet of Things (IoT)",
                 app_iot_desc: "Program microcontrollers like Raspberry Pi and ESP32 with MicroPython for smart devices and IoT projects.",
+                quiz_title: "Test Your Python Knowledge!", 
+                quiz_subtitle: "A couple of quick questions to check your understanding. (Click to expand)", 
+                quiz_q1_text: "What is the output of the following Python code?", 
+                quiz_q1_code: "print(2 ** 3)", 
+                quiz_q1_optA: "6", 
+                quiz_q1_optB: "8", 
+                quiz_q1_optC: "9", 
+                quiz_q1_optD: "5", 
+                quiz_q2_text: "Which keyword is used to define a function in Python?", 
+                quiz_q2_optA: "func", 
+                quiz_q2_optB: "define", 
+                quiz_q2_optC: "def", 
+                quiz_q2_optD: "function", 
+                quiz_q3_text: "What will be the data type of <code>x</code> after this assignment?", 
+                quiz_q3_code: "x = \"Hello\"", 
+                quiz_q3_optA: "Integer (int)", 
+                quiz_q3_optB: "String (str)", 
+                quiz_q3_optC: "Float (float)", 
+                quiz_q3_optD: "Boolean (bool)", 
+                quiz_q4_text: "What is the correct way to create a list in Python?",
+                quiz_q4_optA: "list = {1, 2, 3}",
+                quiz_q4_optB: "list = (1, 2, 3)",
+                quiz_q4_optC: "list = [1, 2, 3]",
+                quiz_q4_optD: "list = <1, 2, 3>",
+                quiz_q5_text: "Which of these is NOT a Python keyword?",
+                quiz_q5_optA: "if",
+                quiz_q5_optB: "while",
+                quiz_q5_optC: "then",
+                quiz_q5_optD: "for",
+                quiz_check_answer_btn: "Check Answer", 
+                quiz_feedback_correct: "Correct!", 
+                quiz_feedback_incorrect: "Not quite. Try again!", 
+                quiz_feedback_incorrect_with_answer: "Incorrect. The correct answer is: ", 
                 instructor_title: "Meet Your Instructor",
                 instructor_subtitle: "Learn from an experienced professional dedicated to your success.",
                 instructor_name_title: "Nathakrit C. (Ford)",
                 instructor_bio: "\"Hi, I'm Nathakrit! With years of experience in Python development and some passion for teaching, I'm excited to guide you through the fascinating world of Python. I'll make learning fun and practical, equipping you with skills for real-world challenges. Let's code together!\"",
                 instructor_expertise: "Expertise: Python, Web Development, Data Analysis, AI Fundamentals",
+                syllabus_title: "Course Roadmap: Your Journey with Python", // New
+                syllabus_subtitle: "A week-by-week guide to what you'll learn and achieve.", // New
+                syllabus_week1_title: "Week 1: Getting Started", // New
+                syllabus_week1_desc: "What is Python? Setting up your environment, your first \"Hello, World!\" program, understanding variables, and basic data types.", // New
+                syllabus_week2_title: "Week 2: Control Flow & Basic Structures", // New
+                syllabus_week2_desc: "Making decisions with if/else statements, repeating tasks with loops (for, while), and an introduction to lists and tuples.", // New
+                syllabus_week3_title: "Week 3: Functions & More Data Structures", // New
+                syllabus_week3_desc: "Creating reusable code with functions, understanding variable scope, and diving into dictionaries and sets.", // New
+                syllabus_week4_title: "Week 4: Object-Oriented Programming (OOP) Intro", // New
+                syllabus_week4_desc: "Understanding the basics of classes and objects, simple inheritance, and the principles of OOP.", // New
+                syllabus_week5_title: "Week 5: Files, Modules & Libraries", // New
+                syllabus_week5_desc: "Reading from and writing to files, using Python's built-in modules, and an introduction to useful external libraries.", // New
+                syllabus_week6_title: "Week 6: Mini-Project & Future Paths", // New
+                syllabus_week6_desc: "Applying your knowledge to build a small, practical application. Discussing further learning paths in web development, data science, AI, and more.", // New
                 cta_title: "Ready to Nail Your Python Skills?",
                 cta_subtitle: "Take the first step towards mastering Python. Get in touch to start your learning adventure with me!",
                 cta_button: "Contact Me to Enroll",
@@ -384,8 +556,10 @@
                 nav_brand: "PyNail",
                 nav_features: "คุณสมบัติ",
                 nav_applications: "การประยุกต์ใช้",
-                nav_about: "เกี่ยวกับ",
+                nav_quiz: "แบบทดสอบ", 
                 nav_instructor: "ผู้สอน",
+                nav_syllabus: "โครงสร้างหลักสูตร", // New Nav Link
+                nav_about: "เกี่ยวกับ",
                 nav_enroll: "ลงทะเบียนเรียน",
                 hero_title: "เริ่มเขียน Python กันเถอะ",
                 hero_subtitle: "คอร์ส Python นี้ ออกแบบมาสำหรับผู้เริ่มต้นตั้งแต่ 0 ผมจะช่วยเปลี่ยนความอยากรู้ ให้เป็นความสามารถ!",
@@ -424,11 +598,58 @@
                 app_ai_desc: "ก้าวเข้าสู่โลกของการวิเคราะห์ข้อมูล การเรียนรู้ของเครื่อง(Machine Learning) และปัญญาประดิษฐ์ ด้วยเครื่องมือและไลบรารีมากมายใน Python เช่น TensorFlow และ scikit-learn",
                 app_iot_title: "อินเทอร์เน็ตในทุกสิ่ง (IoT)",
                 app_iot_desc: "เขียนโปรแกรมควบคุมไมโครคอนโทรลเลอร์อย่าง Raspberry Pi และ ESP32 ด้วย MicroPython เพื่อสร้างอุปกรณ์อัจฉริยะและโปรเจกต์ IoT",
+                quiz_title: "ทดสอบความรู้ Python ของคุณ!", 
+                quiz_subtitle: "คำถามสั้นๆ สองสามข้อเพื่อทดสอบความเข้าใจของคุณ (คลิกเพื่อขยาย)", 
+                quiz_q1_text: "ผลลัพธ์ของโค้ด Python ต่อไปนี้คืออะไร?", 
+                quiz_q1_code: "print(2 ** 3)", 
+                quiz_q1_optA: "6", 
+                quiz_q1_optB: "8", 
+                quiz_q1_optC: "9", 
+                quiz_q1_optD: "5", 
+                quiz_q2_text: "คีย์เวิร์ดใดที่ใช้ในการกำหนดฟังก์ชันใน Python?", 
+                quiz_q2_optA: "func", 
+                quiz_q2_optB: "define", 
+                quiz_q2_optC: "def", 
+                quiz_q2_optD: "function", 
+                quiz_q3_text: "ชนิดข้อมูลของ <code>x</code> จะเป็นอะไรหลังจากการกำหนดค่านี้?", 
+                quiz_q3_code: "x = \"Hello\"", 
+                quiz_q3_optA: "Integer (int)", 
+                quiz_q3_optB: "String (str)", 
+                quiz_q3_optC: "Float (float)", 
+                quiz_q3_optD: "Boolean (bool)", 
+                quiz_q4_text: "วิธีใดคือการสร้างลิสต์ (list) ที่ถูกต้องใน Python?",
+                quiz_q4_optA: "list = {1, 2, 3}",
+                quiz_q4_optB: "list = (1, 2, 3)",
+                quiz_q4_optC: "list = [1, 2, 3]",
+                quiz_q4_optD: "list = <1, 2, 3>",
+                quiz_q5_text: "ข้อใดต่อไปนี้ไม่ใช่คีย์เวิร์ด (keyword) ของ Python?",
+                quiz_q5_optA: "if",
+                quiz_q5_optB: "while",
+                quiz_q5_optC: "then",
+                quiz_q5_optD: "for",
+                quiz_check_answer_btn: "ตรวจสอบคำตอบ", 
+                quiz_feedback_correct: "ถูกต้อง!", 
+                quiz_feedback_incorrect: "ยังไม่ถูก ลองอีกครั้ง!", 
+                quiz_feedback_incorrect_with_answer: "ไม่ถูกต้อง คำตอบที่ถูกต้องคือ: ", 
                 instructor_title: "พบกับผู้สอน",
                 instructor_subtitle: "เรียนรู้จากมืออาชีพมากประสบการณ์ที่ทุ่มเทเพื่อความสำเร็จของทุกท่าน",
                 instructor_name_title: "ณฐกฤต (ฟอร์ด)",
-                instructor_bio: "\"สวัสดีครับ ผมณฐกฤต ด้วยประสบการณ์หลายปีในการพัฒนา Python ผมพร้อมที่จะนำทุกท่านผ่านการเริ่มต้นเขียน Python ผมจะทำให้การเรียนรู้เป็นเรื่องสนุกและนำไปใช้ได้จริง พร้อมมอบทักษะสำหรับความท้าทายในโลกแห่งความเป็นจริง มาเริ่มเขียนโค้ดกันเถอะ!\"",
+                instructor_bio: "\"สวัสดีครับ ผมณฐกฤต ด้วยประสบการณ์หลายปีในการเขียน Python ผมพร้อมที่จะนำทุกท่านผ่านการเริ่มต้นเขียน Python ผมจะทำให้การเรียนรู้เป็นเรื่องสนุกและนำไปใช้ได้จริง พร้อมมอบทักษะสำหรับความท้าทายในโลกแห่งความเป็นจริง มาเริ่มเขียนโค้ดกันเถอะ!\"",
                 instructor_expertise: "ความเชี่ยวชาญ: Python, การพัฒนาเว็บ, การวิเคราะห์ข้อมูล, พื้นฐาน AI",
+                syllabus_title: "โครงสร้างหลักสูตร: การเดินทางของคุณกับ Python", // New
+                syllabus_subtitle: "ภาพรวมเนื้อหาและสิ่งที่คุณจะได้เรียนรู้ในแต่ละสัปดาห์", // New
+                syllabus_week1_title: "สัปดาห์ที่ 1: เริ่มต้นใช้งาน", // New
+                syllabus_week1_desc: "Python คืออะไร? การติดตั้งและตั้งค่าสภาพแวดล้อม, โปรแกรมแรก \"Hello, World!\", ทำความเข้าใจตัวแปรและชนิดข้อมูลพื้นฐาน", // New
+                syllabus_week2_title: "สัปดาห์ที่ 2: การควบคุมการทำงานและโครงสร้างข้อมูลเบื้องต้น", // New
+                syllabus_week2_desc: "การตัดสินใจด้วย if/else, การทำงานซ้ำด้วย loops (for, while), และความรู้เบื้องต้นเกี่ยวกับลิสต์และทูเพิล", // New
+                syllabus_week3_title: "สัปดาห์ที่ 3: ฟังก์ชันและโครงสร้างข้อมูลเพิ่มเติม", // New
+                syllabus_week3_desc: "การสร้างโค้ดที่นำกลับมาใช้ใหม่ได้ด้วยฟังก์ชัน, การทำความเข้าใจขอบเขตของตัวแปร, และการใช้งานดิกชันนารีและเซ็ต", // New
+                syllabus_week4_title: "สัปดาห์ที่ 4: ความรู้เบื้องต้นเกี่ยวกับการเขียนโปรแกรมเชิงวัตถุ (OOP)", // New
+                syllabus_week4_desc: "ทำความเข้าใจพื้นฐานของคลาสและอ็อบเจกต์, การสืบทอดคุณสมบัติเบื้องต้น, และหลักการของ OOP", // New
+                syllabus_week5_title: "สัปดาห์ที่ 5: การจัดการไฟล์, โมดูล และไลบรารี", // New
+                syllabus_week5_desc: "การอ่านและเขียนไฟล์, การใช้งานโมดูลที่มีมาให้ใน Python, และความรู้เบื้องต้นเกี่ยวกับไลบรารีที่มีประโยชน์", // New
+                syllabus_week6_title: "สัปดาห์ที่ 6: มินิโปรเจกต์และเส้นทางในอนาคต", // New
+                syllabus_week6_desc: "การนำความรู้ที่ได้เรียนมาประยุกต์ใช้ในการสร้างแอปพลิเคชันขนาดเล็กที่ใช้งานได้จริง พูดคุยถึงเส้นทางการเรียนรู้เพิ่มเติม เช่น การพัฒนาเว็บ, วิทยาศาสตร์ข้อมูล, AI และอื่นๆ", // New
                 cta_title: "พร้อมที่จะเก่ง Python แล้วหรือยัง?",
                 cta_subtitle: "ก้าวแรกสู่การเขียน Python ติดต่อมาเพื่อเริ่มต้นเรียน",
                 cta_button: "ติดต่อเพื่อลงทะเบียน",
@@ -444,6 +665,133 @@
 
         let currentLanguage = 'en'; 
 
+        // --- Quiz Data and Logic ---
+        const quizData = [
+            {
+                id: 'q1',
+                questionKey: 'quiz_q1_text',
+                codeKey: 'quiz_q1_code',
+                options: [ { textKey: 'quiz_q1_optA', value: '6' }, { textKey: 'quiz_q1_optB', value: '8' }, { textKey: 'quiz_q1_optC', value: '9' }, { textKey: 'quiz_q1_optD', value: '5' } ],
+                correctAnswer: '8',
+                answerKey: 'quiz_q1_optB'
+            },
+            {
+                id: 'q2',
+                questionKey: 'quiz_q2_text',
+                options: [ { textKey: 'quiz_q2_optA', value: 'func' }, { textKey: 'quiz_q2_optB', value: 'define' }, { textKey: 'quiz_q2_optC', value: 'def' }, { textKey: 'quiz_q2_optD', value: 'function' } ],
+                correctAnswer: 'def',
+                answerKey: 'quiz_q2_optC'
+            },
+            {
+                id: 'q3',
+                questionKey: 'quiz_q3_text',
+                codeKey: 'quiz_q3_code',
+                options: [ { textKey: 'quiz_q3_optA', value: 'int' }, { textKey: 'quiz_q3_optB', value: 'str' }, { textKey: 'quiz_q3_optC', value: 'float' }, { textKey: 'quiz_q3_optD', value: 'bool' } ],
+                correctAnswer: 'str',
+                answerKey: 'quiz_q3_optB'
+            },
+            { 
+                id: 'q4',
+                questionKey: 'quiz_q4_text',
+                options: [
+                    { textKey: 'quiz_q4_optA', value: '{1, 2, 3}' },
+                    { textKey: 'quiz_q4_optB', value: '(1, 2, 3)' },
+                    { textKey: 'quiz_q4_optC', value: '[1, 2, 3]' },
+                    { textKey: 'quiz_q4_optD', value: '<1, 2, 3>' }
+                ],
+                correctAnswer: '[1, 2, 3]',
+                answerKey: 'quiz_q4_optC'
+            },
+            { 
+                id: 'q5',
+                questionKey: 'quiz_q5_text',
+                options: [
+                    { textKey: 'quiz_q5_optA', value: 'if' },
+                    { textKey: 'quiz_q5_optB', value: 'while' },
+                    { textKey: 'quiz_q5_optC', value: 'then' },
+                    { textKey: 'quiz_q5_optD', value: 'for' }
+                ],
+                correctAnswer: 'then',
+                answerKey: 'quiz_q5_optC'
+            }
+        ];
+
+        function renderQuiz() {
+            const quizContainer = document.getElementById('quizContainer');
+            if (!quizContainer) return;
+            quizContainer.innerHTML = ''; 
+            
+            quizData.forEach((q) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'bg-white p-6 rounded-xl shadow-lg quiz-question-card';
+                
+                const questionText = document.createElement('p');
+                questionText.className = 'text-lg font-medium text-[var(--color-dark-purple)] mb-1';
+                questionText.setAttribute('data-translate-key', q.questionKey);
+                questionText.innerHTML = translations[currentLanguage][q.questionKey] || q.questionKey; 
+                questionCard.appendChild(questionText);
+
+                if (q.codeKey) {
+                    const codeSnippet = document.createElement('div');
+                    codeSnippet.className = 'code-snippet';
+                    codeSnippet.setAttribute('data-translate-key-code', q.codeKey); 
+                    codeSnippet.textContent = translations[currentLanguage][q.codeKey] || q.codeKey;
+                    questionCard.appendChild(codeSnippet);
+                }
+                
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4';
+                
+                q.options.forEach(opt => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'quiz-option p-3 border rounded-lg text-gray-700 hover:bg-gray-50';
+                    optionDiv.setAttribute('data-translate-key', opt.textKey);
+                    optionDiv.innerHTML = translations[currentLanguage][opt.textKey] || opt.textKey; 
+                    optionDiv.dataset.value = opt.value;
+                    optionDiv.onclick = () => {
+                        Array.from(optionsGrid.children).forEach(child => child.classList.remove('selected'));
+                        optionDiv.classList.add('selected');
+                    };
+                    optionsGrid.appendChild(optionDiv);
+                });
+                questionCard.appendChild(optionsGrid);
+                
+                const checkButton = document.createElement('button');
+                checkButton.className = 'quiz-button bg-[var(--color-teal)] hover:bg-[#5aa8a2] text-white py-2 px-4 rounded-md text-sm';
+                checkButton.setAttribute('data-translate-key', 'quiz_check_answer_btn');
+                checkButton.textContent = translations[currentLanguage]['quiz_check_answer_btn'] || 'Check Answer';
+                
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.className = 'quiz-feedback mt-3 text-sm';
+                
+                checkButton.onclick = () => {
+                    const selectedOption = optionsGrid.querySelector('.quiz-option.selected');
+                    if (selectedOption) {
+                        if (selectedOption.dataset.value === q.correctAnswer) {
+                            feedbackDiv.textContent = translations[currentLanguage]['quiz_feedback_correct'] || 'Correct!';
+                            feedbackDiv.className = 'quiz-feedback mt-3 text-sm correct';
+                        } else {
+                            const correctAnswerText = translations[currentLanguage][q.answerKey] || q.correctAnswer;
+                            feedbackDiv.innerHTML = `${translations[currentLanguage]['quiz_feedback_incorrect_with_answer'] || 'Incorrect. The correct answer is: ' } <strong>${correctAnswerText}</strong>`;
+                            feedbackDiv.className = 'quiz-feedback mt-3 text-sm incorrect';
+                        }
+                        Array.from(optionsGrid.children).forEach(child => child.style.pointerEvents = 'none');
+                        checkButton.disabled = true;
+                        checkButton.style.opacity = '0.7';
+
+                    } else {
+                        feedbackDiv.textContent = translations[currentLanguage]['quiz_select_option_alert'] || "Please select an option.";
+                        feedbackDiv.className = 'quiz-feedback mt-3 text-sm incorrect';
+                    }
+                };
+                
+                questionCard.appendChild(checkButton);
+                questionCard.appendChild(feedbackDiv);
+                quizContainer.appendChild(questionCard);
+            });
+        }
+        // --- End Quiz Logic ---
+
         function setLanguage(lang) {
             currentLanguage = lang;
             document.documentElement.lang = lang; 
@@ -451,61 +799,50 @@
             document.querySelectorAll('[data-translate-key]').forEach(element => {
                 const key = element.getAttribute('data-translate-key');
                 if (translations[lang] && translations[lang][key]) {
-                    if (key === 'contact_email' || key === 'contact_line') {
-                        const content = translations[lang][key];
-                        if (content.includes("<strong>")) {
-                            const parts = content.split("</strong>");
-                            element.innerHTML = `<strong style="color: var(--color-dark-purple);">${parts[0].replace("<strong>","")}</strong>${parts[1]}`;
-                        } else {
-                             element.innerHTML = content;
-                        }
-                    } else {
+                    // Use innerHTML for elements that might contain <code> or <strong> tags
+                    if (key.includes('contact_') || key.includes('quiz_q') || key.includes('syllabus_') || key.includes('hero_') || key.includes('instructor_bio')) {
                         element.innerHTML = translations[lang][key]; 
+                    } else {
+                        element.textContent = translations[lang][key]; 
                     }
                 }
             });
-            // Update active state for all language buttons
             const langButtons = document.querySelectorAll('.lang-button');
             langButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);
             });
+            renderQuiz(); 
         }
         
-        // Hamburger menu toggle
         const hamburgerButton = document.getElementById('hamburgerButton');
         const mobileMenu = document.getElementById('mobileMenu');
-        const navLinksMobile = mobileMenu.querySelectorAll('a, button'); // Get all focusable elements in mobile menu
+        const navLinksMobile = mobileMenu.querySelectorAll('a, button'); 
 
         hamburgerButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Close mobile menu when a link is clicked
         navLinksMobile.forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (event) => { 
                 if (!mobileMenu.classList.contains('hidden')) {
-                     // Only close if it's not a language toggle button itself
-                    if (!link.classList.contains('lang-button')) {
-                        mobileMenu.classList.add('hidden');
+                    if (!link.classList.contains('lang-button') && !link.parentElement.classList.contains('lang-button-container')) {
+                        if (event.target.closest('.lang-button') === null) {
+                            mobileMenu.classList.add('hidden');
+                        }
                     }
                 }
             });
         });
 
-
-        // Language toggle buttons (Desktop and Mobile)
         document.getElementById('langEnBtnDesktop').addEventListener('click', () => setLanguage('en'));
         document.getElementById('langThBtnDesktop').addEventListener('click', () => setLanguage('th'));
         document.getElementById('langEnBtnMobile').addEventListener('click', () => setLanguage('en'));
         document.getElementById('langThBtnMobile').addEventListener('click', () => setLanguage('th'));
 
-
         const contactInfoDiv = document.getElementById('contactInfo');
         const mainEnrollBtn = document.getElementById('mainEnrollBtn');
-        // Ensure navEnrollBtn and navEnrollBtnMobile are correctly selected
-        const navEnrollBtnDesktop = document.getElementById('navEnrollBtn'); // This was the original ID
+        const navEnrollBtnDesktop = document.getElementById('navEnrollBtn'); 
         const navEnrollBtnMobile = document.getElementById('navEnrollBtnMobile');
-
 
         function toggleContactInfo(event) {
             event.preventDefault(); 
@@ -519,9 +856,19 @@
         }
 
         mainEnrollBtn.addEventListener('click', toggleContactInfo);
-        if (navEnrollBtnDesktop) navEnrollBtnDesktop.addEventListener('click', toggleContactInfo); // Check if exists
-        if (navEnrollBtnMobile) navEnrollBtnMobile.addEventListener('click', toggleContactInfo); // Check if exists
+        if (navEnrollBtnDesktop) navEnrollBtnDesktop.addEventListener('click', toggleContactInfo); 
+        if (navEnrollBtnMobile) navEnrollBtnMobile.addEventListener('click', toggleContactInfo); 
         
+        // Quiz Toggle Functionality
+        const quizToggleBtn = document.getElementById('quizToggleBtn');
+        const quizContent = document.getElementById('quizContent');
+
+        if (quizToggleBtn && quizContent) {
+            quizToggleBtn.addEventListener('click', () => {
+                quizContent.classList.toggle('expanded');
+                quizToggleBtn.classList.toggle('expanded'); 
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             setLanguage(currentLanguage); 
