@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Course for Beginners - PyNail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* New color palette */
+        :root {
+            --color-dark-purple: #332D56;
+            --color-desaturated-blue: #4E6688;
+            --color-teal: #71C0BB;
+            --color-pale-lime: #E3EEB2;
+        }
+
+        /* Updated hero background */
+        .hero-bg {
+            background: linear-gradient(135deg, var(--color-dark-purple) 0%, var(--color-desaturated-blue) 100%);
+        }
+        .cta-button, .lang-button {
+            transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        /* Updated active language button color */
+        .lang-button.active {
+            font-weight: bold;
+            color: var(--color-teal);
+        }
+        .lang-button:not(.active):hover {
+            color: var(--color-dark-purple);
+        }
+        .feature-card, .instructor-card, .application-card { /* Added .application-card */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover, .instructor-card:hover, .application-card:hover { /* Added .application-card */
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        #contactInfo {
+            display: none; /* Hidden by default */
+            background-color: var(--color-pale-lime); /* Light background for contact */
+            border-left: 4px solid var(--color-teal); /* Accent border */
+            color: var(--color-dark-purple); /* Dark text for readability */
+        }
+        #contactInfo h4, #contactInfo p {
+             color: var(--color-dark-purple); /* Ensure text inside is dark */
+        }
+        #contactInfo strong {
+            color: var(--color-dark-purple); /* Ensure strong text is also dark */
+        }
+
+
+        /* Simple animation for contact info reveal */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #contactInfo.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-[#332D56]" data-translate-key="nav_brand">PyNail</a>
+            <div class="flex items-center">
+                <a href="#features" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_features">Features</a>
+                <a href="#python-applications" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_applications">Applications</a>
+                <a href="#about" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_about">About</a>
+                <a href="#instructor" class="text-gray-700 hover:text-[#71C0BB] px-3 py-2 rounded-md text-sm font-medium" data-translate-key="nav_instructor">Instructor</a>
+                <button id="navEnrollBtn" class="bg-[#71C0BB] hover:bg-[#5aa8a2] text-white px-4 py-2 rounded-md text-sm font-medium ml-3 cta-button" data-translate-key="nav_enroll">Enroll Now</button>
+                <div class="ml-4 border-l pl-4">
+                    <button id="langEnBtn" class="lang-button px-2 py-1 text-sm active" data-lang="en">EN</button>
+                    <span class="text-gray-300">|</span>
+                    <button id="langThBtn" class="lang-button px-2 py-1 text-sm" data-lang="th">TH</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-bg text-white">
+        <div class="container mx-auto px-6 py-24 md:py-36 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight" data-translate-key="hero_title">
+                Nail Python with this Course
+            </h1>
+            <p class="text-lg md:text-xl mb-10 text-[#E3EEB2] max-w-3xl mx-auto" data-translate-key="hero_subtitle">
+                Dive into the world of coding with my immersive Python course, designed for absolute beginners. I'll help you transform your curiosity into capability!
+            </p>
+            <a href="#cta" class="bg-[#E3EEB2] hover:bg-[#d8e4a0] text-[#332D56] font-bold py-4 px-10 rounded-lg text-lg shadow-xl cta-button" data-translate-key="hero_cta">
+                Begin Your Adventure
+            </a>
+        </div>
+    </header>
+
+    <section id="about" class="py-16 md:py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-translate-key="about_title">Why Python? Your Gateway to Innovation</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto" data-translate-key="about_subtitle">
+                    Python isn't just a language; it's a launchpad for your ideas. Simple, powerful, and universally in demand.
+                </p>
+            </div>
+            <div class="flex flex-wrap -mx-4">
+                <div class="w-full md:w-1/3 px-4 mb-8">
+                    <div class="bg-gray-50 p-8 rounded-xl shadow-lg h-full feature-card">
+                        <div class="flex items-center justify-center bg-[#71C0BB] text-white rounded-full w-16 h-16 mb-6 shadow-md mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center" data-translate-key="about_card1_title">Effortless to Learn</h3>
+                        <p class="text-gray-600 text-center" data-translate-key="about_card1_desc">
+                            Python's clear syntax feels like reading English, making your first steps into coding smooth and enjoyable.
+                        </p>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 px-4 mb-8">
+                    <div class="bg-gray-50 p-8 rounded-xl shadow-lg h-full feature-card">
+                        <div class="flex items-center justify-center bg-[#4E6688] text-white rounded-full w-16 h-16 mb-6 shadow-md mx-auto">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center" data-translate-key="about_card2_title">Limitless Possibilities</h3>
+                        <p class="text-gray-600 text-center" data-translate-key="about_card2_desc">
+                            Web development, data science, AI, automation – Python empowers you to build almost anything you can imagine.
+                        </p>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 px-4 mb-8">
+                    <div class="bg-gray-50 p-8 rounded-xl shadow-lg h-full feature-card">
+                        <div class="flex items-center justify-center bg-[#71C0BB] text-white rounded-full w-16 h-16 mb-6 shadow-md mx-auto opacity-80"> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center" data-translate-key="about_card3_title">Thriving Ecosystem</h3>
+                        <p class="text-gray-600 text-center" data-translate-key="about_card3_desc">
+                            Join a massive global community, with endless libraries and resources to support your growth.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-16 md:py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-translate-key="features_title">What You'll Master in My Course</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto" data-translate-key="features_subtitle">
+                    My curriculum is crafted to build your skills from the ground up, step by step.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg feature-card">
+                    <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature1_title">Python Fundamentals</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature1_desc">Variables, data types, operators, control flow (if/else, loops).</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg feature-card">
+                    <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature2_title">Data Structures</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature2_desc">Lists, tuples, dictionaries, sets, and how to use them effectively.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg feature-card">
+                    <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature3_title">Functions & Modules</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature3_desc">Writing your own functions, understanding scope, and using modules.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg feature-card">
+                    <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature4_title">Object-Oriented Programming (OOP)</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature4_desc">Introduction to classes, objects, inheritance, and polymorphism.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg feature-card">
+                    <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature5_title">File Handling</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature5_desc">Reading from and writing to files with Python.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg feature-card">
+                    <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature6_title">Hands-on Projects</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature6_desc">Apply your knowledge by building practical projects and exercises.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg feature-card md:col-span-1 lg:col-span-1"> <h4 class="text-lg font-semibold text-[#332D56] mb-2" data-translate-key="feature7_title">Intro to AI & Machine Learning</h4>
+                    <p class="text-gray-600 text-sm" data-translate-key="feature7_desc">Explore the basics of Artificial Intelligence and Machine Learning concepts using Python.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="python-applications" class="py-16 md:py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-translate-key="applications_title">Python in Action: Real-World Applications</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto" data-translate-key="applications_subtitle">
+                    Discover the diverse fields where Python shines, empowering innovation and development across industries.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg application-card flex items-start space-x-6">
+                    <div class="flex-shrink-0 flex items-center justify-center bg-[var(--color-teal)] text-white rounded-full w-16 h-16 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="app_web_title">Web Development</h3>
+                        <p class="text-gray-600" data-translate-key="app_web_desc">
+                            Build powerful backends for websites and web applications with frameworks like Django and Flask.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg application-card flex items-start space-x-6">
+                    <div class="flex-shrink-0 flex items-center justify-center bg-[var(--color-teal)] text-white rounded-full w-16 h-16 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="app_game_title">Game Development</h3>
+                        <p class="text-gray-600" data-translate-key="app_game_desc">
+                            Create 2D and even simple 3D games using libraries like Pygame, bringing your interactive ideas to life.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg application-card flex items-start space-x-6">
+                    <div class="flex-shrink-0 flex items-center justify-center bg-[var(--color-teal)] text-white rounded-full w-16 h-16 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 21v-1.5M12 3v1.5m0 15v1.5m3.75-18v1.5M19.5 8.25h-1.5m-15 3.75h1.5m15 0h1.5m-15 3.75h1.5M19.5 15.75h-1.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6h-4.5a1.5 1.5 0 01-1.5-1.5V4.5a6 6 0 00-6 6h4.5a1.5 1.5 0 011.5 1.5v7.5z" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="app_ai_title">AI & Machine Learning</h3>
+                        <p class="text-gray-600" data-translate-key="app_ai_desc">
+                           Dive into data analysis, machine learning, and AI with Python's rich ecosystem of tools like TensorFlow and scikit-learn.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg application-card flex items-start space-x-6">
+                    <div class="flex-shrink-0 flex items-center justify-center bg-[var(--color-teal)] text-white rounded-full w-16 h-16 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-[var(--color-dark-purple)] mb-2" data-translate-key="app_iot_title">Internet of Things (IoT)</h3>
+                        <p class="text-gray-600" data-translate-key="app_iot_desc">
+                            Program microcontrollers like Raspberry Pi and ESP32 with MicroPython for smart devices and IoT projects.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="instructor" class="py-16 md:py-20 bg-gray-100"> <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-translate-key="instructor_title">Meet Your Instructor</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto" data-translate-key="instructor_subtitle">
+                    Learn from an experienced professional dedicated to your success.
+                </p>
+            </div>
+            <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-xl instructor-card flex flex-col md:flex-row items-center"> <img src="https://res.cloudinary.com/ddjivdpzj/image/upload/v1747474964/my_profile_gg96dp.jpg" alt="Course Instructor" class="w-32 h-32 md:w-40 md:h-40 rounded-full mb-6 md:mb-0 md:mr-8 shadow-md object-cover">
+                <div>
+                    <h3 class="text-2xl font-semibold text-[#332D56] mb-2" data-translate-key="instructor_name_title">Nathakrit C. (Lunla)</h3>
+                    <p class="text-gray-600 mb-4" data-translate-key="instructor_bio">
+                        "Hi, I'm Nathakrit! With years of experience in Python development and a passion for teaching, I'm excited to guide you through the fascinating world of Python. I'll make learning fun and practical, equipping you with skills for real-world challenges. Let's code your success story together!"
+                    </p>
+                    <p class="text-sm text-[#4E6688] font-medium" data-translate-key="instructor_expertise">Expertise: Python, Web Development, Data Analysis, AI Fundamentals</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="cta" class="py-20 md:py-24 hero-bg text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6" data-translate-key="cta_title">Ready to Nail Your Python Skills?</h2>
+            <p class="text-lg md:text-xl mb-10 text-[#E3EEB2] max-w-2xl mx-auto" data-translate-key="cta_subtitle">
+                Take the first step towards mastering Python. Get in touch to start your learning adventure with me!
+            </p>
+            <button id="mainEnrollBtn" class="bg-[#E3EEB2] hover:bg-[#d8e4a0] text-[#332D56] font-bold py-4 px-10 rounded-lg text-xl shadow-xl cta-button" data-translate-key="cta_button">
+                Contact Me to Enroll
+            </button>
+            <div id="contactInfo" class="mt-8 p-6 rounded-lg max-w-md mx-auto text-left">
+                <h4 class="font-semibold text-xl mb-3" data-translate-key="contact_info_title">Enrollment Details:</h4>
+                <p class="mb-2" data-translate-key="contact_email"><strong>Email:</strong> Nathakrit.cha@gmail.com</p>
+                <p data-translate-key="contact_line"><strong>Line ID:</strong> lunla258</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p data-translate-key="footer_copyright">&copy; 2025 PyNail. All rights reserved.</p>
+            <p class="text-sm mt-1" data-translate-key="footer_tagline">Helping you nail Python, one line at a time.</p>
+            <div class="mt-4">
+                <a href="#" class="text-[#71C0BB] hover:text-[#5aa8a2] px-2" data-translate-key="footer_privacy">Privacy Policy</a>
+                <a href="#" class="text-[#71C0BB] hover:text-[#5aa8a2] px-2" data-translate-key="footer_terms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Translations object updated
+        const translations = {
+            en: {
+                nav_brand: "PyNail",
+                nav_features: "Features",
+                nav_applications: "Applications", // New Nav Link
+                nav_about: "About",
+                nav_instructor: "Instructor",
+                nav_enroll: "Enroll Now",
+                hero_title: "Start to code Python",
+                hero_subtitle: "Dive into the world of coding with my immersive Python course, designed for absolute beginners. I'll help you transform your curiosity into capability!",
+                hero_cta: "Begin Your Adventure",
+                about_title: "Why Python? Your Gateway to Innovation",
+                about_subtitle: "Python isn't just a language, it's a launchpad for your ideas. Simple, powerful, and universally in demand.",
+                about_card1_title: "Effortless to Learn",
+                about_card1_desc: "Python's clear syntax feels like reading English, making your first steps into coding smooth and enjoyable.",
+                about_card2_title: "Limitless Possibilities",
+                about_card2_desc: "Web development, data science, AI, automation – Python empowers you to build almost anything you can imagine.",
+                about_card3_title: "Thriving Ecosystem",
+                about_card3_desc: "Join a massive global community, with endless libraries and resources to support your growth.",
+                features_title: "What You'll Master in My Course",
+                features_subtitle: "My curriculum is crafted to build your skills from the ground up, step by step.",
+                feature1_title: "Python Fundamentals",
+                feature1_desc: "Variables, data types, operators, control flow (if/else, loops).",
+                feature2_title: "Data Structures",
+                feature2_desc: "Lists, tuples, dictionaries, sets, and how to use them effectively.",
+                feature3_title: "Functions & Modules",
+                feature3_desc: "Writing your own functions, understanding scope, and using modules.",
+                feature4_title: "Object-Oriented Programming (OOP)",
+                feature4_desc: "Introduction to classes, objects, inheritance, and polymorphism.",
+                feature5_title: "File Handling",
+                feature5_desc: "Reading from and writing to files with Python.",
+                feature6_title: "Hands-on Projects",
+                feature6_desc: "Apply your knowledge by building practical projects and exercises.",
+                feature7_title: "Intro to AI & Machine Learning",
+                feature7_desc: "Explore the basics of Artificial Intelligence and Machine Learning concepts using Python.",
+                applications_title: "Python in Action: Real-World Applications", // New Section
+                applications_subtitle: "Discover the diverse fields where Python shines, empowering innovation and development across industries.", // New Section
+                app_web_title: "Web Development", // New
+                app_web_desc: "Build powerful backends for websites and web applications with frameworks like Django and Flask.", // New
+                app_game_title: "Game Development", // New
+                app_game_desc: "Create 2D and even simple 3D games using libraries like Pygame, bringing your interactive ideas to life.", // New
+                app_ai_title: "AI & Machine Learning", // New
+                app_ai_desc: "Dive into data analysis, machine learning, and AI with Python's rich ecosystem of tools like TensorFlow and scikit-learn.", // New
+                app_iot_title: "Internet of Things (IoT)", // New
+                app_iot_desc: "Program microcontrollers like Raspberry Pi and ESP32 with MicroPython for smart devices and IoT projects.", // New
+                instructor_title: "Meet Your Instructor",
+                instructor_subtitle: "Learn from an experienced professional dedicated to your success.",
+                instructor_name_title: "Nathakrit C. (Ford)",
+                instructor_bio: "\"Hi, I'm Nathakrit! With years of experience in Python development and some passion for teaching, I'm excited to guide you through the fascinating world of Python. I'll make learning fun and practical, equipping you with skills for real-world challenges. Let's code together!\"",
+                instructor_expertise: "Expertise: Python, Web Development, Data Analysis, AI Fundamentals",
+                cta_title: "Ready to Nail Your Python Skills?",
+                cta_subtitle: "Take the first step towards mastering Python. Get in touch to start your learning adventure with me!",
+                cta_button: "Contact Me to Enroll",
+                contact_info_title: "Contact Details:",
+                contact_email: "<strong>Email:</strong> Nathakrit.cha@gmail.com",
+                contact_line: "<strong>Line ID:</strong> lunla258",
+                footer_copyright: "&copy; 2025 PyNail. All rights reserved.",
+                footer_tagline: "Helping you nail Python, one line at a time.",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service"
+            },
+            th: {
+                nav_brand: "PyNail",
+                nav_features: "คุณสมบัติ",
+                nav_applications: "การประยุกต์ใช้", // New Nav Link
+                nav_about: "เกี่ยวกับ",
+                nav_instructor: "ผู้สอน",
+                nav_enroll: "ลงทะเบียนเรียน",
+                hero_title: "เริ่มเขียน Python กันเถอะ",
+                hero_subtitle: "คอร์ส Python นี้ ออกแบบมาสำหรับผู้เริ่มต้นตั้งแต่ 0 ผมจะช่วยเปลี่ยนความอยากรู้ ให้เป็นความสามารถ!",
+                hero_cta: "เริ่มต้นเรียน",
+                about_title: "ทำไมต้อง Python?",
+                about_subtitle: "Python เป็นภาษาคอมพิวเตอร์ที่เรียบง่าย ทรงพลัง และเป็นที่ต้องการในระดับสากล",
+                about_card1_title: "เรียนรู้อย่างง่ายดาย",
+                about_card1_desc: "ไวยากรณ์ที่ชัดเจนของ Python ให้ความรู้สึกเหมือนอ่านภาษาอังกฤษ ทำให้การเริ่มต้นเขียนโค้ดของราบรื่นและสนุกสนาน",
+                about_card2_title: "ความเป็นไปได้ที่ไร้ขีดจำกัด",
+                about_card2_desc: "การพัฒนาเว็บ, วิทยาศาสตร์ข้อมูล, AI, ระบบอัตโนมัติ – Python ช่วยสร้างสรรค์ได้เกือบทุกสิ่งที่จินตนาการ",
+                about_card3_title: "ระบบนิเวศที่เฟื่องฟู",
+                about_card3_desc: "เข้าร่วมชุมชนระดับโลกขนาดใหญ่ พร้อมด้วยไลบรารีและทรัพยากรที่สนับสนุนการเขียนโค้ด",
+                features_title: "สิ่งที่ทุกท่านจะเรียนรู้ในคอร์ส",
+                features_subtitle: "หลักสูตรนี้สร้างขึ้นเพื่อพัฒนาทักษะตั้งแต่เริ่มต้นทีละขั้นตอน",
+                feature1_title: "พื้นฐาน Python",
+                feature1_desc: "ตัวแปร, ชนิดข้อมูล, ตัวดำเนินการ, การควบคุมการไหล (if/else, loops)",
+                feature2_title: "โครงสร้างข้อมูล",
+                feature2_desc: "ลิสต์, ทูเพิล, ดิกชันนารี, เซ็ต และวิธีใช้งานอย่างมีประสิทธิภาพ",
+                feature3_title: "ฟังก์ชันและโมดูล",
+                feature3_desc: "การเขียนฟังก์ชันของท่านเอง, การทำความเข้าใจขอบเขต, และการใช้โมดูล",
+                feature4_title: "การเขียนโปรแกรมเชิงวัตถุ (OOP)",
+                feature4_desc: "ความรู้เบื้องต้นเกี่ยวกับคลาส, อ็อบเจกต์, การสืบทอด, และพหุสัณฐาน",
+                feature5_title: "การจัดการไฟล์",
+                feature5_desc: "การอ่านและเขียนไฟล์ด้วย Python",
+                feature6_title: "โครงการจริง",
+                feature6_desc: "นำความรู้ไปใช้โดยการสร้างโครงการและแบบฝึกหัดจริง",
+                feature7_title: "ความรู้เบื้องต้นเกี่ยวกับ AI และ Machine Learning",
+                feature7_desc: "สำรวจพื้นฐานของปัญญาประดิษฐ์และแนวคิดการเรียนรู้ของเครื่องโดยใช้ Python",
+                applications_title: "Python กับการใช้งานจริง: ตัวอย่างแอปพลิเคชัน", // New Section
+                applications_subtitle: "Python มีบทบาทสำคัญ ในการขับเคลื่อนนวัตกรรมและการพัฒนาในอุตสาหกรรมต่างๆ", // New Section
+                app_web_title: "การพัฒนาเว็บไซต์", // New
+                app_web_desc: "สร้างระบบหลังบ้าน (Backend) ที่ทรงพลังสำหรับเว็บไซต์และเว็บแอปพลิเคชัน ด้วยเฟรมเวิร์กยอดนิยมอย่าง Django และ Flask", // New
+                app_game_title: "การพัฒนาเกม", // New
+                app_game_desc: "สร้างสรรค์เกม 2 มิติ หรือแม้แต่เกม 3 มิติเบื้องต้น โดยใช้ไลบรารีอย่าง Pygame ทำให้จินตนาการเกมของคุณเป็นจริง", // New
+                app_ai_title: "ปัญญาประดิษฐ์ (AI) และการเรียนรู้ของเครื่อง", // New
+                app_ai_desc: "ก้าวเข้าสู่โลกของการวิเคราะห์ข้อมูล การเรียนรู้ของเครื่อง(Machine Learning) และปัญญาประดิษฐ์ ด้วยเครื่องมือและไลบรารีมากมายใน Python เช่น TensorFlow และ scikit-learn", // New
+                app_iot_title: "อินเทอร์เน็ตในทุกสิ่ง (IoT)", // New
+                app_iot_desc: "เขียนโปรแกรมควบคุมไมโครคอนโทรลเลอร์อย่าง Raspberry Pi และ ESP32 ด้วย MicroPython เพื่อสร้างอุปกรณ์อัจฉริยะและโปรเจกต์ IoT", // New
+                instructor_title: "พบกับผู้สอน",
+                instructor_subtitle: "เรียนรู้จากมืออาชีพมากประสบการณ์ที่ทุ่มเทเพื่อความสำเร็จของทุกท่าน",
+                instructor_name_title: "ณฐกฤต (ฟอร์ด)",
+                instructor_bio: "\"สวัสดีครับ ผมณฐกฤต ด้วยประสบการณ์หลายปีในการพัฒนา Python ผมพร้อมที่จะนำทุกท่านผ่านการเริ่มต้นเขียน Python ผมจะทำให้การเรียนรู้เป็นเรื่องสนุกและนำไปใช้ได้จริง พร้อมมอบทักษะสำหรับความท้าทายในโลกแห่งความเป็นจริง มาเริ่มเขียนโค้ดกันเถอะ!\"",
+                instructor_expertise: "ความเชี่ยวชาญ: Python, การพัฒนาเว็บ, การวิเคราะห์ข้อมูล, พื้นฐาน AI",
+                cta_title: "พร้อมที่จะเก่ง Python แล้วหรือยัง?",
+                cta_subtitle: "ก้าวแรกสู่การเขียน Python ติดต่อมาเพื่อเริ่มต้นเรียน",
+                cta_button: "ติดต่อเพื่อลงทะเบียน",
+                contact_info_title: "รายละเอียดการลงทะเบียน:",
+                contact_email: "<strong>อีเมล:</strong> Nathakrit.cha@gmail.com",
+                contact_line: "<strong>Line ID:</strong> lunla258",
+                footer_copyright: "&copy; 2025 PyNail. สงวนลิขสิทธิ์",
+                footer_tagline: "ช่วยให้คุณเก่ง Python ทีละบรรทัด",
+                footer_privacy: "นโยบายความเป็นส่วนตัว",
+                footer_terms: "ข้อกำหนดในการให้บริการ"
+            }
+        };
+
+        let currentLanguage = 'en'; // Default language
+
+        // Function to set the language
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang; 
+
+            document.querySelectorAll('[data-translate-key]').forEach(element => {
+                const key = element.getAttribute('data-translate-key');
+                if (translations[lang] && translations[lang][key]) {
+                    if (key === 'contact_email' || key === 'contact_line') {
+                        const content = translations[lang][key];
+                        if (content.includes("<strong>")) {
+                            const parts = content.split("</strong>");
+                            element.innerHTML = `<strong style="color: var(--color-dark-purple);">${parts[0].replace("<strong>","")}</strong>${parts[1]}`;
+                        } else {
+                             element.innerHTML = content;
+                        }
+                    } else {
+                        element.innerHTML = translations[lang][key]; 
+                    }
+                }
+            });
+
+            document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
+            document.getElementById('langThBtn').classList.toggle('active', lang === 'th');
+        }
+
+        document.getElementById('langEnBtn').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('langThBtn').addEventListener('click', () => setLanguage('th'));
+
+        const contactInfoDiv = document.getElementById('contactInfo');
+        const mainEnrollBtn = document.getElementById('mainEnrollBtn');
+        const navEnrollBtn = document.getElementById('navEnrollBtn');
+
+        function toggleContactInfo(event) {
+            event.preventDefault(); 
+            const isVisible = contactInfoDiv.classList.contains('show');
+            if (isVisible) {
+                contactInfoDiv.classList.remove('show');
+            } else {
+                contactInfoDiv.classList.add('show');
+                contactInfoDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        mainEnrollBtn.addEventListener('click', toggleContactInfo);
+        navEnrollBtn.addEventListener('click', toggleContactInfo);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLanguage); 
+        });
+
+    </script>
+</body>
+</html>
